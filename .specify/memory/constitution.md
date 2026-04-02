@@ -1,50 +1,27 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# 项目宪章：ProView (专业极简图片查看器)
 
-## Core Principles
+## 1. 项目愿景
+打造 Windows 平台上最纯粹、响应最快的生产力级图片查看工具。ProView 的核心逻辑是“不干扰”，让用户在查看图片时，系统开销降到最低，视觉干扰降到零。
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## 2. 核心目标 (The "Must-Haves")
+* **秒开体验**：利用 UWP 原生异步加载机制，实现大图的高速冷启动。
+* **零依赖架构**：严禁引入第三方图像库，完全基于 Windows 影像组件 (WIC) 调用系统内置编解码器。
+* **极简交互逻辑**：
+    * **导航**：键盘左右方向键切换同文件夹图片，支持首尾循环映射。
+    * **缩放**：以鼠标光标为锚点，通过滚轮实现亚像素级平滑缩放。
+* **无状态运行**：不产生临时文件，不扫描索引，关闭即彻底释放资源。
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+## 3. 非目标 (Out of Scope)
+* ❌ 杜绝任何形式的图片管理、相册或库功能。
+* ❌ 不提供滤镜、剪裁或旋转等编辑修改功能。
+* ❌ 无需任何设置界面或复杂的右键菜单。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## 4. 成功指标
+* **包体积**：编译后的安装包 (.msix / .appx) 严格控制在 5MB 以内。
+* **资源利用率**：空载 CPU 占用为 0%，查看 4K 图片时的额外内存开销控制在系统解码器底线。
+* **部署性**：适配 Windows 10 (19041+) 及 Windows 11 全系版本。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
-
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
-
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
-
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
-
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+## 5. 关键约束
+* **开发工具**：Visual Studio 2019。
+* **技术底座**：C# / XAML / .NET Native。
+* **权限管理**：需申请宽泛文件访问权限以支持同级目录遍历。
