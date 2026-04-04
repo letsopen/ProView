@@ -120,8 +120,8 @@ namespace ProView
             double newOffsetX = imageX * newZoom - mouseX;
             double newOffsetY = imageY * newZoom - mouseY;
             
-            // 应用缩放和滚动位置（禁用动画）
-            ImageScroller.ChangeView(newOffsetX, newOffsetY, newZoom, true);
+            // 应用缩放和滚动位置（启用动画使缩放流畅）
+            ImageScroller.ChangeView(newOffsetX, newOffsetY, newZoom, false);
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
