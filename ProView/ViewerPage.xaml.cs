@@ -215,6 +215,10 @@ namespace ProView
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
 
+                // 设置容器尺寸为图片原始尺寸
+                ImageContainer.Width = _currentImage.ImageWidth;
+                ImageContainer.Height = _currentImage.ImageHeight;
+
                 // 更新 UI
                 OpenPrompt.Visibility = Visibility.Collapsed;
                 ShowInfo();
@@ -255,19 +259,23 @@ namespace ProView
             // 确保缩放因子在有效范围内
             zoomFactor = Math.Max(0.1f, Math.Min(10.0f, zoomFactor));
 
-            // 计算居中位置
+            // 计算缩放后的尺寸
             double scaledWidth = imageWidth * zoomFactor;
             double scaledHeight = imageHeight * zoomFactor;
-            
+
+            // 计算居中位置：让图片中心对齐视图中心
+            // scrollX = (viewWidth - scaledWidth) / 2 表示从左边缘滚动，使得内容居中
             double scrollX = (viewWidth - scaledWidth) / 2;
             double scrollY = (viewHeight - scaledHeight) / 2;
 
-            // 确保滚动位置合理
+            // 确保滚动位置合理（不应为负数）
             scrollX = Math.Max(0, scrollX);
             scrollY = Math.Max(0, scrollY);
 
-            // 应用缩放和居中位置
-            ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
+            // 一次性应用缩放和居中位置
+            bool result = ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
+            
+            System.Diagnostics.Debug.WriteLine($"FitImageToView: image={imageWidth}x{imageHeight}, view={viewWidth}x{viewHeight}, zoom={zoomFactor}, scroll=({scrollX}, {scrollY}), result={result}");
         }
 
         private async Task LoadSiblingImagesAsync(StorageFile file)
@@ -347,6 +355,10 @@ namespace ProView
 
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
+
+                // 设置容器尺寸为图片原始尺寸
+                ImageContainer.Width = _currentImage.ImageWidth;
+                ImageContainer.Height = _currentImage.ImageHeight;
 
                 UpdateIndexDisplay();
                 ShowInfo();
