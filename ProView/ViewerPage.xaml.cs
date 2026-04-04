@@ -14,6 +14,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ProView
@@ -25,6 +26,18 @@ namespace ProView
         private ImageFileInfo _currentImage;
         private bool _isInfoVisible = false;
         private DispatcherTimer _infoTimer;
+
+        // 缩放和平移状态
+        private double _scale = 1.0;
+        private double _offsetX = 0;
+        private double _offsetY = 0;
+        
+        // 拖拽状态
+        private bool _isDragging = false;
+        private double _dragStartX;
+        private double _dragStartY;
+        private double _dragStartOffsetX;
+        private double _dragStartOffsetY;
 
         // 支持的图片格式
         private static readonly string[] SupportedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp" };
@@ -38,14 +51,8 @@ namespace ProView
 
         private async void OnPageLoaded(object sender, RoutedEventArgs e)
         {
-            // 检测文件系统权限
             await CheckFileSystemPermissionAsync();
-            
-            // 注册 CoreWindow 级别的键盘事件
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
-            
-            // 使用 AddHandler 注册滚轮事件，确保可以接收已处理的事件
-            ImageScroller.AddHandler(ScrollViewer.PointerWheelChangedEvent, new PointerEventHandler(OnScrollViewerWheel), true);
         }
 
         private async Task CheckFileSystemPermissionAsync()
@@ -81,47 +88,86 @@ namespace ProView
             
             if (result == ContentDialogResult.Primary)
             {
-                // 打开系统设置页面
                 await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
             }
         }
 
-        private void OnScrollViewerWheel(object sender, PointerRoutedEventArgs e)
+        private void OnCanvasWheel(object sender, PointerRoutedEventArgs e)
         {
-            // 完全拦截滚轮事件用于缩放
-            e.Handled = true;
-            
-            // 获取鼠标在 ScrollViewer 视口中的位置
-            var pointerPoint = e.GetCurrentPoint(ImageScroller);
+            if (_currentImage == null) return;
+
+            var pointerPoint = e.GetCurrentPoint(ImageCanvas);
             double mouseX = pointerPoint.Position.X;
             double mouseY = pointerPoint.Position.Y;
-            
-            // 获取滚轮方向
+
             var delta = pointerPoint.Properties.MouseWheelDelta;
-            
-            // 获取当前缩放因子和滚动偏移
-            float currentZoom = ImageScroller.ZoomFactor;
-            double currentOffsetX = ImageScroller.HorizontalOffset;
-            double currentOffsetY = ImageScroller.VerticalOffset;
-            
-            // 计算新的缩放因子（每次滚动调整10%）
-            float zoomDelta = delta > 0 ? 0.1f : -0.1f;
-            float newZoom = currentZoom + currentZoom * zoomDelta;
-            
-            // 限制在有效范围内
-            newZoom = Math.Max(0.1f, Math.Min(10.0f, newZoom));
-            
-            // 计算鼠标在图片上的位置（相对于图片左上角，以像素为单位）
-            // 滚动偏移 + 鼠标位置 = 缩放后图片上的位置，再除以缩放因子得到原始图片坐标
-            double imageX = (currentOffsetX + mouseX) / currentZoom;
-            double imageY = (currentOffsetY + mouseY) / currentZoom;
-            
-            // 计算新的滚动偏移，使鼠标位置指向相同的图片像素
-            double newOffsetX = imageX * newZoom - mouseX;
-            double newOffsetY = imageY * newZoom - mouseY;
-            
-            // 应用缩放和滚动位置（启用动画使缩放流畅）
-            ImageScroller.ChangeView(newOffsetX, newOffsetY, newZoom, false);
+
+            // 计算鼠标在图片上的位置（图片坐标）
+            double imageX = (mouseX - _offsetX) / _scale;
+            double imageY = (mouseY - _offsetY) / _scale;
+
+            // 计算新的缩放比例
+            double zoomFactor = delta > 0 ? 1.1 : 0.9;
+            double newScale = _scale * zoomFactor;
+
+            // 限制缩放范围
+            newScale = Math.Max(0.1, Math.Min(10.0, newScale));
+
+            // 计算新的偏移量，使鼠标位置保持对齐
+            _offsetX = mouseX - imageX * newScale;
+            _offsetY = mouseY - imageY * newScale;
+            _scale = newScale;
+
+            UpdateImageTransform();
+            e.Handled = true;
+        }
+
+        private void OnCanvasPointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (_currentImage == null) return;
+
+            var pointerPoint = e.GetCurrentPoint(ImageCanvas);
+            _isDragging = true;
+            _dragStartX = pointerPoint.Position.X;
+            _dragStartY = pointerPoint.Position.Y;
+            _dragStartOffsetX = _offsetX;
+            _dragStartOffsetY = _offsetY;
+
+            ImageCanvas.CapturePointer(e.Pointer);
+            e.Handled = true;
+        }
+
+        private void OnCanvasPointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            if (!_isDragging) return;
+
+            var pointerPoint = e.GetCurrentPoint(ImageCanvas);
+            double deltaX = pointerPoint.Position.X - _dragStartX;
+            double deltaY = pointerPoint.Position.Y - _dragStartY;
+
+            _offsetX = _dragStartOffsetX + deltaX;
+            _offsetY = _dragStartOffsetY + deltaY;
+
+            UpdateImageTransform();
+            e.Handled = true;
+        }
+
+        private void OnCanvasPointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            if (_isDragging)
+            {
+                _isDragging = false;
+                ImageCanvas.ReleasePointerCapture(e.Pointer);
+                e.Handled = true;
+            }
+        }
+
+        private void UpdateImageTransform()
+        {
+            ImageTransform.ScaleX = _scale;
+            ImageTransform.ScaleY = _scale;
+            ImageTransform.TranslateX = _offsetX;
+            ImageTransform.TranslateY = _offsetY;
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -281,45 +327,32 @@ namespace ProView
         {
             try
             {
-                // 加载同级目录图片列表
                 await LoadSiblingImagesAsync(file);
 
-                // 先隐藏 ScrollViewer
-                ImageScroller.Opacity = 0;
+                ImageCanvas.Opacity = 0;
 
-                // 加载当前图片
                 _currentImage = new ImageFileInfo(file);
                 await _currentImage.InitializeAsync();
 
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
-                MainImage.Opacity = 1;
 
-                // 设置容器尺寸为图片原始尺寸
-                ImageContainer.Width = _currentImage.ImageWidth;
-                ImageContainer.Height = _currentImage.ImageHeight;
-
-                // 更新 UI
                 OpenPrompt.Visibility = Visibility.Collapsed;
                 ShowInfo();
 
-                // 更新索引显示
                 _currentIndex = _imageFiles.IndexOf(file);
                 UpdateIndexDisplay();
 
-                // 等待布局更新
-                await Task.Delay(100);
+                await Task.Delay(50);
 
-                // 后台应用缩放和居中
                 FitImageToView();
 
-                // 显示
-                ImageScroller.Opacity = 1;
+                ImageCanvas.Opacity = 1;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
-                ImageScroller.Opacity = 1;
+                ImageCanvas.Opacity = 1;
             }
         }
 
@@ -329,36 +362,24 @@ namespace ProView
 
             double imageWidth = _currentImage.ImageWidth;
             double imageHeight = _currentImage.ImageHeight;
-            double viewWidth = ImageScroller.ActualWidth;
-            double viewHeight = ImageScroller.ActualHeight;
+            double viewWidth = ImageCanvas.ActualWidth;
+            double viewHeight = ImageCanvas.ActualHeight;
 
             if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) return;
 
-            // 计算需要的缩放比例（只缩小不放大）
             double scaleX = viewWidth / imageWidth;
             double scaleY = viewHeight / imageHeight;
             double scaleFactor = Math.Min(scaleX, scaleY);
 
-            // 只缩小不放大：如果图片比可视区域小，保持原始大小
-            float zoomFactor = (scaleFactor < 1.0) ? (float)scaleFactor : 1.0f;
+            _scale = (scaleFactor < 1.0) ? scaleFactor : 1.0;
+            _scale = Math.Max(0.1, Math.Min(10.0, _scale));
 
-            // 确保缩放因子在有效范围内
-            zoomFactor = Math.Max(0.1f, Math.Min(10.0f, zoomFactor));
+            double scaledWidth = imageWidth * _scale;
+            double scaledHeight = imageHeight * _scale;
+            _offsetX = (viewWidth - scaledWidth) / 2;
+            _offsetY = (viewHeight - scaledHeight) / 2;
 
-            // 计算缩放后的尺寸
-            double scaledWidth = imageWidth * zoomFactor;
-            double scaledHeight = imageHeight * zoomFactor;
-
-            // 计算居中位置
-            double scrollX = (viewWidth - scaledWidth) / 2;
-            double scrollY = (viewHeight - scaledHeight) / 2;
-
-            // 确保滚动位置合理
-            scrollX = Math.Max(0, scrollX);
-            scrollY = Math.Max(0, scrollY);
-
-            // 禁用动画，直接应用
-            ImageScroller.ChangeView(scrollX, scrollY, zoomFactor, true);
+            UpdateImageTransform();
         }
 
         private async Task LoadSiblingImagesAsync(StorageFile file)
@@ -432,38 +453,29 @@ namespace ProView
 
             var file = _imageFiles[index];
             
-            // 先隐藏 ScrollViewer
-            ImageScroller.Opacity = 0;
+            ImageCanvas.Opacity = 0;
             
             try
             {
-                // 加载新图片
                 _currentImage = new ImageFileInfo(file);
                 await _currentImage.InitializeAsync();
 
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
 
-                // 设置容器尺寸
-                ImageContainer.Width = _currentImage.ImageWidth;
-                ImageContainer.Height = _currentImage.ImageHeight;
-
                 UpdateIndexDisplay();
                 ShowInfo();
 
-                // 等待布局更新
-                await Task.Delay(100);
+                await Task.Delay(50);
 
-                // 后台应用缩放和居中（禁用动画）
                 FitImageToView();
 
-                // 显示
-                ImageScroller.Opacity = 1;
+                ImageCanvas.Opacity = 1;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
-                ImageScroller.Opacity = 1;
+                ImageCanvas.Opacity = 1;
             }
         }
 

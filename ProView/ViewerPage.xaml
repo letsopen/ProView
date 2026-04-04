@@ -15,24 +15,20 @@
           Drop="OnDrop"
           Background="Transparent">
         <!-- 主图片显示区域 -->
-        <ScrollViewer x:Name="ImageScroller"
-                      ZoomMode="Enabled"
-                      HorizontalScrollMode="Auto"
-                      VerticalScrollMode="Auto"
-                      HorizontalScrollBarVisibility="Hidden"
-                      VerticalScrollBarVisibility="Hidden"
-                      MinZoomFactor="0.1"
-                      MaxZoomFactor="10.0"
-                      Background="Transparent"
-                      BringIntoViewOnFocusChange="False">
-            <Grid x:Name="ImageContainer"
-                  Background="Transparent">
-                <Image x:Name="MainImage"
-                       Stretch="Uniform"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-            </Grid>
-        </ScrollViewer>
+        <Canvas x:Name="ImageCanvas"
+                Background="Transparent"
+                PointerWheelChanged="OnCanvasWheel"
+                PointerPressed="OnCanvasPointerPressed"
+                PointerMoved="OnCanvasPointerMoved"
+                PointerReleased="OnCanvasPointerReleased">
+            <Image x:Name="MainImage"
+                   Stretch="None"
+                   RenderTransformOrigin="0,0">
+                <Image.RenderTransform>
+                    <CompositeTransform x:Name="ImageTransform"/>
+                </Image.RenderTransform>
+            </Image>
+        </Canvas>
 
         <!-- 极简信息提示 (文件名) -->
         <TextBlock x:Name="FileNameText"
