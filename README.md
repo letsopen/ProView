@@ -1,86 +1,77 @@
+# ProView
+
+一个极简主义的 UWP 图片查看器，专注于快速浏览和简洁体验。
+
+## 功能特性
+
+- **键盘导航**：左右方向键快速切换同级目录中的图片
+- **滚轮缩放**：鼠标滚轮直接缩放图片（无需按住 Ctrl）
+- **极简界面**：纯黑背景，无多余 UI 元素
+- **文件关联**：支持设为默认图片查看器
+- **零依赖**：无需任何第三方库
+
+## 支持的图片格式
+
+`.jpg` `.jpeg` `.png` `.gif` `.bmp` `.tiff` `.webp`
+
+## 系统要求
+
+- Windows 10 版本 2004 (10.0; Build 19041) 或更高
+- Visual Studio 2019
+
+## 快捷键
+
+| 按键 | 功能 |
+|------|------|
+| `←` / `→` | 切换上一张/下一张图片 |
+| `O` | 打开文件选择器 |
+| `F` | 切换全屏模式 |
+| `Esc` | 退出全屏 |
+
+## 编译与运行
+
+1. 使用 Visual Studio 2019 打开 `ProView.sln`
+2. 选择 `x64` 或 `x86` 平台
+3. 按 F5 运行
+
+## 设置为默认图片查看器
+
+1. 打开 **设置 → 应用 → 默认应用**
+2. 在"照片查看器"部分选择 **ProView**
+
+或者：
+1. 右键点击任意图片
+2. 选择 **打开方式 → 选择其他应用**
+3. 选择 **ProView** 并勾选"始终使用此应用打开 .xxx 文件"
+
+## 权限说明
+
+本应用需要 **文件系统访问权限** 才能浏览图片。首次运行时会提示授权。
+
+授权方法：
+1. 打开 **设置 → 隐私 → 文件系统**
+2. 找到 **ProView** 并开启权限
+
+## 项目结构
+
+```
+ProView/
+├── App.xaml(.cs)        # 应用入口，处理文件关联启动
+├── ViewerPage.xaml(.cs) # 主查看器页面
+├── ImageFileInfo.cs     # 图片信息模型
+└── Package.appxmanifest # 应用清单（文件关联、权限配置）
+```
+
+## 开发说明
+
+本项目基于 Microsoft PhotoLab UWP 示例简化而来，移除了所有编辑功能和相册管理功能，专注于纯粹的图片浏览体验。
+
+## 许可证
+
+MIT License
+
 ---
-page_type: sample
-languages:
-- csharp
-products:
-- windows
-- windows-uwp
-statusNotificationTargets:
-- codefirst@microsoft.com
----
 
-<!---
-  category: ControlsLayoutAndText FilesFoldersAndLibraries
--->
-
-# ProView sample
-
-A mini-app for viewing and editing image files, demonstrating XAML layout, data binding, and UI customization features for Universal Windows Platform (UWP) apps.
-
-> Note - This sample is targeted and tested for Windows 10, version 2004 (10.0; Build 19041), and Visual Studio 2019. If you prefer, you can use project properties to retarget the project(s) to Windows 10, version 1903 (10.0; Build 18362).
-
-![ProView sample showing the image collection page](Screenshots/ProView-collection-page.png)
-![ProView sample showing the image editing page](Screenshots/ProView-editing-page.png)
-
-This repo includes the complete sample pictured above, plus separate versions that serve as starting points for a series of
-[XAML basics tutorials](xaml-basics-starting-points).
-Each of these starting points is a simplified version of the complete sample, making the code easier to browse around in as you go through each tutorial.
-
-> **Note:** The tutorials do not proceed sequentially to build up to the complete sample, so be sure to start each tutorial by opening the correct starting point project.
-Also, be sure to check out the complete sample to see additional features such as custom animations.
-
-## Features
-
-ProView demonstrates:
-
-* XAML layout ranging from basics to adaptive and tailored layouts.
-* XAML data binding including the [{x:Bind} markup extension](https://docs.microsoft.com/windows/uwp/xaml-platform/x-bind-markup-extension).
-* XAML styling and UI customization.
-* Image effects from [Windows.UI.Composition](https://docs.microsoft.com/uwp/api/windows.ui.composition).
-* Use of the [Windows UI Library (WinUI)](https://docs.microsoft.com/windows/apps/winui) and the [Windows Community Toolkit](https://docs.microsoft.com/windows/communitytoolkit/) (for [ReorderGridAnimation](https://docs.microsoft.com/windows/communitytoolkit/animations/reordergrid)).
-* Loading images from the Pictures library using data virtualization to increase performance when there are numerous files.
-
-## Code at a glance
-
-If you're just interested in code snippets for certain areas and don't want to browse or run the full sample, 
-check out the following files for examples of some highlighted features:
-
-* Layout: see [MainPage.xaml](ProView/MainPage.xaml#25) and [DetailPage.xaml](ProView/DetailPage.xaml#25).
-* Data binding with x:Bind: see [ImageGridView_DefaultItemTemplate](ProView/MainPage.xaml#72) in [MainPage.xaml](ProView/MainPage.xaml#25)
-* Styling and customization: see [FancySliderControlTemplate](ProView/DetailPage.xaml#61) in [DetailPage.xaml](PhotoLabl/DetailPage.xaml#25). 
-* Image effects: see code starting with [InitializeEffects](ProView/DetailPage.xaml.cs#185) in [DetailPage.xaml.cs](ProView/DetailPage.xaml.cs#25).
-
-## Related documentation and samples
-
-* [Controls and patterns for UWP apps](https://docs.microsoft.com/windows/uwp/controls-and-patterns/index)
-* [Layout for UWP apps](https://docs.microsoft.com/windows/uwp/layout/)
-* [Data binding in depth](https://docs.microsoft.com/windows/uwp/data-binding/data-binding-in-depth)
-* [UWP style guide](https://docs.microsoft.com/windows/uwp/style/)
-* [Visual layer](https://docs.microsoft.com/windows/uwp/composition/visual-layer)
-* [ListView and GridView data virtualization](https://docs.microsoft.com/windows/uwp/debug-test-perf/listview-and-gridview-data-optimization)
-* [Data virtualization sample](https://github.com/Microsoft/Windows-universal-samples/tree/master/Samples/XamlDataVirtualization)
-
-## External libraries used in this sample
-
-* [Windows UI Library (WinUI)](https://docs.microsoft.com/windows/apps/winui)
-* [Windows Community Toolkit](https://docs.microsoft.com/windows/communitytoolkit/)
-
-## Universal Windows Platform development
-
-### Prerequisites
-
-- Windows 10. Minimum: Windows 10, version 1809 (10.0; Build 17763), also known as the Windows 10 October 2018 Update.
-- [Windows 10 SDK](https://developer.microsoft.com/windows/downloads/windows-10-sdk). Minimum: Windows SDK version 10.0.17763.0 (Windows 10, version 1809).
-- [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) (or Visual Studio 2017). You can use the free Visual Studio Community Edition to build and run Windows Universal Platform (UWP) apps.
-
-To get the latest updates to Windows and the development tools, and to help shape their development, join 
-the [Windows Insider Program](https://insider.windows.com).
-
-## Running the sample
-
-The default project is ProView and you can Start Debugging (F5) or Start Without Debugging (Ctrl+F5) to try it out. 
-The app will run in the emulator or on physical devices. 
-
-> **Note:** The platform target currently defaults to ARM, so be sure to change that to x64 or x86 if you want to test on a non-ARM device. 
+*ProView - 简约，但不简单* 
 
 
