@@ -6,10 +6,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Background="Black"
-                         
-                                                 >
+                           >
 
-    <Grid x:ConnectionId='2' x:Name="RootGrid">
+    <Grid x:ConnectionId='2' x:Name="RootGrid"
+                             
+                                                     
+          AllowDrop="True"
+                               
+                       
+          Background="Transparent">
         <!-- 主图片显示区域 -->
         <ScrollViewer x:ConnectionId='3' x:Name="ImageScroller"
                       ZoomMode="Enabled"

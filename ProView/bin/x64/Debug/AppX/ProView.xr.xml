@@ -8,11 +8,16 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
-      <RootEvent Name="KeyDown" />
-      <RootEvent Name="PointerWheelChanged" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
+      <RootProperty Name="AllowDrop" />
+      <RootProperty Name="Background" />
       <RootProperty Name="Children" />
+      <RootEvent Name="KeyDown" />
+      <RootEvent Name="PointerWheelChanged" />
+      <RootEvent Name="DragOver" />
+      <RootEvent Name="Drop" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
       <RootProperty Name="ZoomMode" />

@@ -6,10 +6,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Background="Black"
-      KeyDown="OnKeyDown"
-      PointerWheelChanged="OnPointerWheelChanged">
+      Loaded="OnPageLoaded">
 
-    <Grid x:Name="RootGrid">
+    <Grid x:Name="RootGrid"
+          KeyDown="OnKeyDown"
+          PointerWheelChanged="OnPointerWheelChanged"
+          AllowDrop="True"
+          DragOver="OnDragOver"
+          Drop="OnDrop"
+          Background="Transparent">
         <!-- 主图片显示区域 -->
         <ScrollViewer x:Name="ImageScroller"
                       ZoomMode="Enabled"

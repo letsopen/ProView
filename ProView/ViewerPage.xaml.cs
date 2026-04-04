@@ -32,9 +32,44 @@ namespace ProView
         public ViewerPage()
         {
             this.InitializeComponent();
-            SetupDragDrop();
             SetupInfoTimer();
             Window.Current.CoreWindow.PointerMoved += OnPointerMove;
+        }
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            // 注册 CoreWindow 级别的键盘事件
+            Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+        }
+
+        private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
+        {
+            switch (args.VirtualKey)
+            {
+                case VirtualKey.O:
+                    _ = OpenFilePicker();
+                    args.Handled = true;
+                    break;
+                case VirtualKey.Left:
+                    _ = NavigatePrevious();
+                    args.Handled = true;
+                    break;
+                case VirtualKey.Right:
+                    _ = NavigateNext();
+                    args.Handled = true;
+                    break;
+                case VirtualKey.F:
+                    ToggleFullScreen();
+                    args.Handled = true;
+                    break;
+                case VirtualKey.Escape:
+                    if (IsFullScreen())
+                    {
+                        ExitFullScreen();
+                        args.Handled = true;
+                    }
+                    break;
+            }
         }
 
         private void SetupInfoTimer()
@@ -46,13 +81,6 @@ namespace ProView
                 _infoTimer.Stop();
                 HideInfo();
             };
-        }
-
-        private void SetupDragDrop()
-        {
-            this.AllowDrop = true;
-            this.Drop += OnDrop;
-            this.DragOver += OnDragOver;
         }
 
         private void OnDragOver(object sender, DragEventArgs e)
@@ -206,7 +234,7 @@ namespace ProView
 
             try
             {
-                var folder = file.GetParentAsync() != null ? await file.GetParentAsync() : null;
+                StorageFolder folder = await file.GetParentAsync();
                 if (folder != null)
                 {
                     var allFiles = await folder.GetFilesAsync();
