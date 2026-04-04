@@ -25,6 +25,7 @@ namespace ProView
         private ImageFileInfo _currentImage;
         private bool _isInfoVisible = false;
         private DispatcherTimer _infoTimer;
+        private bool _hasFileSystemPermission = false;
 
         // 支持的图片格式
         private static readonly string[] SupportedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp" };
@@ -36,13 +37,55 @@ namespace ProView
             Window.Current.CoreWindow.PointerMoved += OnPointerMove;
         }
 
-        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        private async void OnPageLoaded(object sender, RoutedEventArgs e)
         {
+            // 检测文件系统权限
+            await CheckFileSystemPermissionAsync();
+            
             // 注册 CoreWindow 级别的键盘事件
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
             
             // 使用 AddHandler 注册滚轮事件，确保可以接收已处理的事件
             ImageScroller.AddHandler(ScrollViewer.PointerWheelChangedEvent, new PointerEventHandler(OnScrollViewerWheel), true);
+        }
+
+        private async Task CheckFileSystemPermissionAsync()
+        {
+            try
+            {
+                // 尝试访问一个常见路径来检测权限
+                var testFolder = await StorageFolder.GetFolderFromPathAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+                _hasFileSystemPermission = true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                _hasFileSystemPermission = false;
+                await ShowPermissionDialogAsync();
+            }
+            catch (Exception)
+            {
+                // 其他异常也认为没有权限
+                _hasFileSystemPermission = false;
+            }
+        }
+
+        private async Task ShowPermissionDialogAsync()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "需要文件系统权限",
+                Content = "ProView 需要文件系统访问权限才能浏览图片。\n\n请点击\"打开设置\"，在隐私设置中开启\"文件系统\"权限。",
+                PrimaryButtonText = "打开设置",
+                CloseButtonText = "稍后再说"
+            };
+
+            var result = await dialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Primary)
+            {
+                // 打开系统设置页面
+                await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
+            }
         }
 
         private void OnScrollViewerWheel(object sender, PointerRoutedEventArgs e)
