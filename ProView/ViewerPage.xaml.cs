@@ -39,6 +39,11 @@ namespace ProView
         private double _dragStartOffsetX;
         private double _dragStartOffsetY;
 
+        // 双缓冲切换状态
+        private bool _usingImage1 = true;
+        private Image _currentImageControl;
+        private CompositeTransform _currentTransform;
+
         // 支持的图片格式
         private static readonly string[] SupportedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp" };
 
@@ -47,6 +52,10 @@ namespace ProView
             this.InitializeComponent();
             SetupInfoTimer();
             Window.Current.CoreWindow.PointerMoved += OnPointerMove;
+            
+            // 初始化当前使用的图片控件
+            _currentImageControl = Image1;
+            _currentTransform = Transform1;
         }
 
         private async void OnPageLoaded(object sender, RoutedEventArgs e)
@@ -177,10 +186,23 @@ namespace ProView
 
         private void UpdateImageTransform()
         {
-            ImageTransform.ScaleX = _scale;
-            ImageTransform.ScaleY = _scale;
-            ImageTransform.TranslateX = _offsetX;
-            ImageTransform.TranslateY = _offsetY;
+            _currentTransform.ScaleX = _scale;
+            _currentTransform.ScaleY = _scale;
+            _currentTransform.TranslateX = _offsetX;
+            _currentTransform.TranslateY = _offsetY;
+        }
+
+        // 更新两个变换（用于切换时同步）
+        private void UpdateBothTransforms()
+        {
+            Transform1.ScaleX = _scale;
+            Transform1.ScaleY = _scale;
+            Transform1.TranslateX = _offsetX;
+            Transform1.TranslateY = _offsetY;
+            Transform2.ScaleX = _scale;
+            Transform2.ScaleY = _scale;
+            Transform2.TranslateX = _offsetX;
+            Transform2.TranslateY = _offsetY;
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -342,30 +364,25 @@ namespace ProView
             {
                 await LoadSiblingImagesAsync(file);
 
-                ImageCanvas.Opacity = 0;
-
                 _currentImage = new ImageFileInfo(file);
                 await _currentImage.InitializeAsync();
 
                 var bitmap = await _currentImage.GetImageSourceAsync();
-                MainImage.Source = bitmap;
-
+                
+                // 首次加载，直接显示
+                _currentImageControl.Source = bitmap;
+                
                 OpenPrompt.Visibility = Visibility.Collapsed;
                 ShowInfo();
 
                 _currentIndex = _imageFiles.IndexOf(file);
                 UpdateIndexDisplay();
 
-                await Task.Delay(50);
-
                 FitImageToView();
-
-                ImageCanvas.Opacity = 1;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
-                ImageCanvas.Opacity = 1;
             }
         }
 
@@ -466,30 +483,102 @@ namespace ProView
 
             var file = _imageFiles[index];
             
-            ImageCanvas.Opacity = 0;
-            
             try
             {
-                _currentImage = new ImageFileInfo(file);
-                await _currentImage.InitializeAsync();
+                // 加载新图片
+                var newImage = new ImageFileInfo(file);
+                await newImage.InitializeAsync();
+                var bitmap = await newImage.GetImageSourceAsync();
 
-                var bitmap = await _currentImage.GetImageSourceAsync();
-                MainImage.Source = bitmap;
+                // 切换到另一个 Image 控件
+                Image nextImageControl;
+                CompositeTransform nextTransform;
+                
+                if (_usingImage1)
+                {
+                    nextImageControl = Image2;
+                    nextTransform = Transform2;
+                }
+                else
+                {
+                    nextImageControl = Image1;
+                    nextTransform = Transform1;
+                }
 
+                // 设置新图片
+                nextImageControl.Source = bitmap;
+                
+                // 更新当前图片信息
+                _currentImage = newImage;
                 UpdateIndexDisplay();
                 ShowInfo();
 
-                await Task.Delay(50);
+                // 计算新图片的缩放和位置
+                FitImageToViewForTransform(nextTransform);
 
-                FitImageToView();
+                // 淡入淡出动画
+                var storyboard = new Windows.UI.Xaml.Media.Animation.Storyboard();
+                
+                var fadeOut = new Windows.UI.Xaml.Media.Animation.DoubleAnimation
+                {
+                    From = 1,
+                    To = 0,
+                    Duration = TimeSpan.FromMilliseconds(100)
+                };
+                Windows.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeOut, _currentImageControl);
+                Windows.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeOut, "Opacity");
+                
+                var fadeIn = new Windows.UI.Xaml.Media.Animation.DoubleAnimation
+                {
+                    From = 0,
+                    To = 1,
+                    Duration = TimeSpan.FromMilliseconds(100)
+                };
+                Windows.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeIn, nextImageControl);
+                Windows.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeIn, "Opacity");
+                
+                storyboard.Children.Add(fadeOut);
+                storyboard.Children.Add(fadeIn);
+                storyboard.Begin();
 
-                ImageCanvas.Opacity = 1;
+                // 切换当前使用的控件
+                _usingImage1 = !_usingImage1;
+                _currentImageControl = nextImageControl;
+                _currentTransform = nextTransform;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
-                ImageCanvas.Opacity = 1;
             }
+        }
+
+        private void FitImageToViewForTransform(CompositeTransform transform)
+        {
+            if (_currentImage == null) return;
+
+            double imageWidth = _currentImage.ImageWidth;
+            double imageHeight = _currentImage.ImageHeight;
+            double viewWidth = ImageCanvas.ActualWidth;
+            double viewHeight = ImageCanvas.ActualHeight;
+
+            if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) return;
+
+            double scaleX = viewWidth / imageWidth;
+            double scaleY = viewHeight / imageHeight;
+            double scaleFactor = Math.Min(scaleX, scaleY);
+
+            _scale = (scaleFactor < 1.0) ? scaleFactor : 1.0;
+            _scale = Math.Max(0.1, Math.Min(10.0, _scale));
+
+            double scaledWidth = imageWidth * _scale;
+            double scaledHeight = imageHeight * _scale;
+            _offsetX = (viewWidth - scaledWidth) / 2;
+            _offsetY = (viewHeight - scaledHeight) / 2;
+
+            transform.ScaleX = _scale;
+            transform.ScaleY = _scale;
+            transform.TranslateX = _offsetX;
+            transform.TranslateY = _offsetY;
         }
 
         private void ToggleFullScreen()
