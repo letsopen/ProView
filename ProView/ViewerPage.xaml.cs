@@ -208,6 +208,9 @@ namespace ProView
                 // 加载同级目录图片列表
                 await LoadSiblingImagesAsync(file);
 
+                // 先隐藏 ScrollViewer
+                ImageScroller.Opacity = 0;
+
                 // 加载当前图片
                 _currentImage = new ImageFileInfo(file);
                 await _currentImage.InitializeAsync();
@@ -228,13 +231,19 @@ namespace ProView
                 _currentIndex = _imageFiles.IndexOf(file);
                 UpdateIndexDisplay();
 
-                // 延迟执行自适应缩放，确保布局已更新
-                await Task.Delay(100); 
+                // 等待布局更新
+                await Task.Delay(100);
+
+                // 后台应用缩放和居中
                 FitImageToView();
+
+                // 显示
+                ImageScroller.Opacity = 1;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
+                ImageScroller.Opacity = 1;
             }
         }
 
@@ -264,19 +273,16 @@ namespace ProView
             double scaledWidth = imageWidth * zoomFactor;
             double scaledHeight = imageHeight * zoomFactor;
 
-            // 计算居中位置：让图片中心对齐视图中心
-            // scrollX = (viewWidth - scaledWidth) / 2 表示从左边缘滚动，使得内容居中
+            // 计算居中位置
             double scrollX = (viewWidth - scaledWidth) / 2;
             double scrollY = (viewHeight - scaledHeight) / 2;
 
-            // 确保滚动位置合理（不应为负数）
+            // 确保滚动位置合理
             scrollX = Math.Max(0, scrollX);
             scrollY = Math.Max(0, scrollY);
 
-            // 一次性应用缩放和居中位置
-            bool result = ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
-            
-            System.Diagnostics.Debug.WriteLine($"FitImageToView: image={imageWidth}x{imageHeight}, view={viewWidth}x{viewHeight}, zoom={zoomFactor}, scroll=({scrollX}, {scrollY}), result={result}");
+            // 禁用动画，直接应用
+            ImageScroller.ChangeView(scrollX, scrollY, zoomFactor, true);
         }
 
         private async Task LoadSiblingImagesAsync(StorageFile file)
@@ -350,8 +356,8 @@ namespace ProView
 
             var file = _imageFiles[index];
             
-            // 先黑屏，隐藏当前图片
-            MainImage.Opacity = 0;
+            // 先隐藏 ScrollViewer
+            ImageScroller.Opacity = 0;
             
             try
             {
@@ -366,20 +372,22 @@ namespace ProView
                 ImageContainer.Width = _currentImage.ImageWidth;
                 ImageContainer.Height = _currentImage.ImageHeight;
 
-                // 后台应用缩放和居中
-                FitImageToView();
-
                 UpdateIndexDisplay();
                 ShowInfo();
 
-                // 显示图片
-                MainImage.Opacity = 1;
+                // 等待布局更新
+                await Task.Delay(100);
+
+                // 后台应用缩放和居中（禁用动画）
+                FitImageToView();
+
+                // 显示
+                ImageScroller.Opacity = 1;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
-                // 出错也要恢复显示
-                MainImage.Opacity = 1;
+                ImageScroller.Opacity = 1;
             }
         }
 
