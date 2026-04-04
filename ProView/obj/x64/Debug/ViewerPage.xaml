@@ -10,7 +10,6 @@
 
     <Grid x:ConnectionId='2' x:Name="RootGrid"
                              
-                                                     
           AllowDrop="True"
                                
                        

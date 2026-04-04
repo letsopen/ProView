@@ -15,7 +15,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Children" />
       <RootEvent Name="KeyDown" />
-      <RootEvent Name="PointerWheelChanged" />
       <RootEvent Name="DragOver" />
       <RootEvent Name="Drop" />
     </RootType>

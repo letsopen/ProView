@@ -40,6 +40,31 @@ namespace ProView
         {
             // 注册 CoreWindow 级别的键盘事件
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+            
+            // 使用 AddHandler 注册滚轮事件，确保可以接收已处理的事件
+            ImageScroller.AddHandler(ScrollViewer.PointerWheelChangedEvent, new PointerEventHandler(OnScrollViewerWheel), true);
+        }
+
+        private void OnScrollViewerWheel(object sender, PointerRoutedEventArgs e)
+        {
+            // 完全拦截滚轮事件用于缩放
+            e.Handled = true;
+            
+            // 获取滚轮方向
+            var delta = e.GetCurrentPoint(ImageScroller).Properties.MouseWheelDelta;
+            
+            // 获取当前缩放因子
+            float currentZoom = ImageScroller.ZoomFactor;
+            
+            // 计算新的缩放因子（每次滚动调整10%）
+            float zoomDelta = delta > 0 ? 0.1f : -0.1f;
+            float newZoom = currentZoom + currentZoom * zoomDelta;
+            
+            // 限制在有效范围内
+            newZoom = Math.Max(0.1f, Math.Min(10.0f, newZoom));
+            
+            // 应用缩放（禁用动画）
+            ImageScroller.ChangeView(null, null, newZoom, true);
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -162,12 +187,6 @@ namespace ProView
                     }
                     break;
             }
-        }
-
-        private void OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
-        {
-            // ScrollViewer 已内置缩放功能，这里可以添加以鼠标为中心的缩放增强
-            // 当前使用 UWP 原生 ScrollViewer 缩放行为
         }
 
         private async Task OpenFilePicker()
