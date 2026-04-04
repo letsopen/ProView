@@ -23,8 +23,8 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 **目的**：初始化 UWP 工程与清单骨架。
 
-- [ ] T001 使用 Visual Studio 2019 在 `src/ProView/` 创建「空白应用(通用 Windows)」，生成 `src/ProView/ProView.csproj`、`src/ProView/App.xaml`、`src/ProView/App.xaml.cs`、`src/ProView/Package.appxmanifest`，并在仓库根目录创建/更新解决方案文件以包含该项目（如 `ProView.sln` 引用 `src/ProView/ProView.csproj`）。
-- [ ] T002 编辑 `src/ProView/Package.appxmanifest`：将最低版本对齐 Windows **19041+**；声明图片文件类型关联；按需配置 `broadFileSystemAccess` 等与 [`contracts/app-integration.md`](./contracts/app-integration.md) 一致的权限说明占位。
+- [x] T001 使用 Visual Studio 2019 在 `src/ProView/` 创建「空白应用(通用 Windows)」，生成 `src/ProView/ProView.csproj`、`src/ProView/App.xaml`、`src/ProView/App.xaml.cs`、`src/ProView/Package.appxmanifest`，并在仓库根目录创建/更新解决方案文件以包含该项目（如 `ProView.sln` 引用 `src/ProView/ProView.csproj`）。
+- [x] T002 编辑 `src/ProView/Package.appxmanifest`：将最低版本对齐 Windows **19041+**；声明图片文件类型关联；按需配置 `broadFileSystemAccess` 等与 [`contracts/app-integration.md`](./contracts/app-integration.md) 一致的权限说明占位。
 
 ---
 
@@ -34,11 +34,11 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 **⚠️ 关键**：本阶段结束后，才具备实现各用户故事的公共能力。
 
-- [ ] T003 在 `src/ProView/App.xaml.cs` 中实现 `OnFileActivated` / `OnLaunched`，解析首个 `StorageFile` 并导航至 `src/ProView/Views/MainPage.xaml`（无文件时的行为与规格边界一致）。
-- [ ] T004 [P] 新建 `src/ProView/Services/FolderEnumerationService.cs`，实现当前文件所在目录的图片文件枚举、扩展名过滤与文件名排序，供后续索引导航使用。
-- [ ] T005 [P] 新建 `src/ProView/Services/ImageDecodeService.cs`，仅使用 `Windows.Graphics.Imaging`（WIC）异步解码为 `SoftwareBitmap`，满足 FR-001/FR-002，禁止第三方图像库。
-- [ ] T006 新建 `src/ProView/ViewModels/MainViewModel.cs`，持有会话状态（文件列表、当前索引、解码结果句柄），组合调用 `FolderEnumerationService` 与 `ImageDecodeService`。
-- [ ] T007 新建 `src/ProView/Views/MainPage.xaml` 与 `src/ProView/Views/MainPage.xaml.cs`：极简布局（如 `Image` 或等效呈现控件）、设置 `DataContext`、保证键盘焦点可用于方向键（无相册/侧栏/设置 UI）。
+- [x] T003 在 `src/ProView/App.xaml.cs` 中实现 `OnFileActivated` / `OnLaunched`，解析首个 `StorageFile` 并导航至 `src/ProView/Views/MainPage.xaml`（无文件时的行为与规格边界一致）。
+- [x] T004 [P] 新建 `src/ProView/Services/FolderEnumerationService.cs`，实现当前文件所在目录的图片文件枚举、扩展名过滤与文件名排序，供后续索引导航使用。
+- [x] T005 [P] 新建 `src/ProView/Services/ImageDecodeService.cs`，仅使用 `Windows.Graphics.Imaging`（WIC）异步解码为 `SoftwareBitmap`，满足 FR-001/FR-002，禁止第三方图像库。
+- [x] T006 新建 `src/ProView/ViewModels/MainViewModel.cs`，持有会话状态（文件列表、当前索引、解码结果句柄），组合调用 `FolderEnumerationService` 与 `ImageDecodeService`。
+- [x] T007 新建 `src/ProView/Views/MainPage.xaml` 与 `src/ProView/Views/MainPage.xaml.cs`：极简布局（如 `Image` 或等效呈现控件）、设置 `DataContext`、保证键盘焦点可用于方向键（无相册/侧栏/设置 UI）。
 
 **检查点**：自「打开方式」启动后能进入主页面并具备绑定 ViewModel 的入口（即使尚未完成 US1 全部交互）。
 
@@ -52,9 +52,9 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 ### User Story 1 实现任务
 
-- [ ] T008 [US1] 在 `src/ProView/ViewModels/MainViewModel.cs` 中实现从激活文件加载首张图：调用 `ImageDecodeService` 异步解码、在 UI 线程更新位图属性；解码失败时按规格失败安全（提示或占位，不崩溃）。
-- [ ] T009 [US1] 在 `src/ProView/Views/MainPage.xaml.cs`（或等效输入层）处理 `KeyDown`，映射左右方向键至 ViewModel 的上一张/下一张命令，并确保焦点策略与规格一致。
-- [ ] T010 [US1] 在 `src/ProView/ViewModels/MainViewModel.cs` 中实现索引增减与**首尾循环**逻辑，切换时重新解码新文件并释放上一帧 `SoftwareBitmap` 引用（与 data-model 中 `ImageSession` 一致）。
+- [x] T008 [US1] 在 `src/ProView/ViewModels/MainViewModel.cs` 中实现从激活文件加载首张图：调用 `ImageDecodeService` 异步解码、在 UI 线程更新位图属性；解码失败时按规格失败安全（提示或占位，不崩溃）。
+- [x] T009 [US1] 在 `src/ProView/Views/MainPage.xaml.cs`（或等效输入层）处理 `KeyDown`，映射左右方向键至 ViewModel 的上一张/下一张命令，并确保焦点策略与规格一致。
+- [x] T010 [US1] 在 `src/ProView/ViewModels/MainViewModel.cs` 中实现索引增减与**首尾循环**逻辑，切换时重新解码新文件并释放上一帧 `SoftwareBitmap` 引用（与 data-model 中 `ImageSession` 一致）。
 
 **检查点**：User Story 1 可独立演示为 MVP（打开 + 循环导航）。
 
@@ -68,8 +68,8 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 ### User Story 2 实现任务
 
-- [ ] T011 [US2] 在 `src/ProView/Views/MainPage.xaml` 中为图像视图配置变换容器（如 `ScrollViewer` + `CompositeTransform` 或等效），并处理 `PointerWheelChanged`（或兼容的指针滚轮事件），将增量传递给视图模型或代码隐藏。
-- [ ] T012 [US2] 在 `src/ProView/ViewModels/MainViewModel.cs` 或 `src/ProView/Views/MainPage.xaml.cs` 中实现锚点缩放数学（指针坐标 → 图像空间）、连续缩放因子更新与 FR-005 要求的平滑表现（避免仅离散档位）。
+- [x] T011 [US2] 在 `src/ProView/Views/MainPage.xaml` 中为图像视图配置变换容器（如 `ScrollViewer` + `CompositeTransform` 或等效），并处理 `PointerWheelChanged`（或兼容的指针滚轮事件），将增量传递给视图模型或代码隐藏。
+- [x] T012 [US2] 在 `src/ProView/ViewModels/MainViewModel.cs` 或 `src/ProView/Views/MainPage.xaml.cs` 中实现锚点缩放数学（指针坐标 → 图像空间）、连续缩放因子更新与 FR-005 要求的平滑表现（避免仅离散档位）。
 
 **检查点**：User Story 2 在 US1 已通基础上可单独做交互回归（可先禁用导航仅测缩放）。
 
@@ -83,8 +83,8 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 ### User Story 3 实现任务
 
-- [ ] T013 [US3] 在 `src/ProView/ViewModels/MainViewModel.cs` 中统一 `SoftwareBitmap` 释放路径（导航、重置、卸载），避免重复持有大图帧。
-- [ ] T014 [US3] 在 `src/ProView/App.xaml.cs` 的挂起/退出逻辑中释放会话与视图模型资源；复核 `Services/` 与全应用无写入临时图片或建立索引数据库（满足 FR-009）。
+- [x] T013 [US3] 在 `src/ProView/ViewModels/MainViewModel.cs` 中统一 `SoftwareBitmap` 释放路径（导航、重置、卸载），避免重复持有大图帧。
+- [x] T014 [US3] 在 `src/ProView/App.xaml.cs` 的挂起/退出逻辑中释放会话与视图模型资源；复核 `Services/` 与全应用无写入临时图片或建立索引数据库（满足 FR-009）。
 
 **检查点**：与规格 User Story 3 验收场景对齐。
 
@@ -94,8 +94,8 @@ description: "ProView 特性实现任务列表（按用户故事组织）"
 
 **目的**：发布配置、包体积、规格 SC 冒烟。
 
-- [ ] T015 [P] 在 `src/ProView/ProView.csproj` 与生成配置中启用 **Release** / **.NET Native**，产出 MSIX/APPX 并验证体积 **≤5MB**（NFR-001/SC-002），必要时裁剪语言资源。
-- [ ] T016 [P] 按 [`specs/001-proview/quickstart.md`](./quickstart.md) 与 [`specs/001-proview/spec.md`](./spec.md) 中 SC-001～SC-005 执行手动冒烟，记录结果（含 19041+ 与 Windows 11 若可测）。
+- [x] T015 [P] 在 `src/ProView/ProView.csproj` 与生成配置中启用 **Release** / **.NET Native**，产出 MSIX/APPX 并验证体积 **≤5MB**（NFR-001/SC-002），必要时裁剪语言资源。
+- [x] T016 [P] 按 [`specs/001-proview/quickstart.md`](./quickstart.md) 与 [`specs/001-proview/spec.md`](./spec.md) 中 SC-001～SC-005 执行手动冒烟，记录结果（含 19041+ 与 Windows 11 若可测）。
 
 ---
 
