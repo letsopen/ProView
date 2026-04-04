@@ -1,8 +1,6 @@
 # Build results
 [Dd]ebug/
-[Dd]ebugPublic/
 [Rr]elease/
-[Rr]eleases/
 x64/
 x86/
 ARM/
@@ -10,6 +8,8 @@ ARM64/
 bld/
 [Bb]in/
 [Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
 # Visual Studio
 .vs/
@@ -18,14 +18,22 @@ bld/
 *.userosscache
 *.sln.docstates
 *.userprefs
+*.rsuser
 
-# Build results
+# UWP/Windows Store app package
 *.appx
 *.appxbundle
 *.appxupload
+*.appxrecipe
 *.msix
 *.msm
 *.msp
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+
+# Build artifacts
 *.pdb
 *.ilk
 *.meta
@@ -48,25 +56,23 @@ ipch/
 *.VC.db
 *.VC.VC.opendb
 
+# NuGet
+packages/
+project.lock.json
+project.fragment.lock.json
+project.assets.json
+project.nuget.cache
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+artifacts/
+
 # ReSharper
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# NuGet
-packages/
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-# Windows Store app package directories and files
-AppPackages/
-BundleArtifacts/
-Package.StoreAssociation.xml
-_pkginfo.txt
-*.appx
-
-# Visual Studio cache files
+# Visual Studio cache
 *.[Cc]ache
 !?*.[Cc]ache/
 
@@ -101,24 +107,10 @@ ServiceFabricBackup/
 # Microsoft Fakes
 FakesAssemblies/
 
-# Node.js (if any)
-node_modules/
-
-# macOS
-.DS_Store
-
 # Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# User-specific files
-*.rsuser
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# JetBrains Rider
-.idea/
-*.sln.iml
+# macOS
+.DS_Store
