@@ -2,8 +2,9 @@
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" 
          xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" 
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-         IgnorableNamespaces="uap mp rescap">
+         IgnorableNamespaces="uap uap4 mp rescap">
   <Identity Name="b12bc6ce-be37-44c5-b058-2b1cf98befd9" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="b12bc6ce-be37-44c5-b058-2b1cf98befd9" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -25,17 +26,20 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
+        <!-- 图片文件关联 -->
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="image">
-            <uap:DisplayName>Image Files</uap:DisplayName>
+          <uap:FileTypeAssociation Name="image" DesiredView="default">
+            <uap:DisplayName>ProView Image</uap:DisplayName>
+            <uap:Logo>Assets\Square44x44Logo.png</uap:Logo>
+            <uap:InfoTip>用 ProView 打开图片</uap:InfoTip>
             <uap:SupportedFileTypes>
-              <uap:FileType ContentType="image/jpeg">.jpg</uap:FileType>
-              <uap:FileType ContentType="image/jpeg">.jpeg</uap:FileType>
-              <uap:FileType ContentType="image/png">.png</uap:FileType>
-              <uap:FileType ContentType="image/gif">.gif</uap:FileType>
-              <uap:FileType ContentType="image/bmp">.bmp</uap:FileType>
-              <uap:FileType ContentType="image/tiff">.tiff</uap:FileType>
-              <uap:FileType ContentType="image/webp">.webp</uap:FileType>
+              <uap:FileType ContentType="image/jpeg" uap4:Kind="image">.jpg</uap:FileType>
+              <uap:FileType ContentType="image/jpeg" uap4:Kind="image">.jpeg</uap:FileType>
+              <uap:FileType ContentType="image/png" uap4:Kind="image">.png</uap:FileType>
+              <uap:FileType ContentType="image/gif" uap4:Kind="image">.gif</uap:FileType>
+              <uap:FileType ContentType="image/bmp" uap4:Kind="image">.bmp</uap:FileType>
+              <uap:FileType ContentType="image/tiff" uap4:Kind="image">.tiff</uap:FileType>
+              <uap:FileType ContentType="image/webp" uap4:Kind="image">.webp</uap:FileType>
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>
         </uap:Extension>
