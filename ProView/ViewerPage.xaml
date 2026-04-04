@@ -24,10 +24,9 @@
                       VerticalScrollBarVisibility="Hidden"
                       MinZoomFactor="0.1"
                       MaxZoomFactor="10.0"
-                      Background="Transparent">
-            <Grid x:Name="ImageContainer"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center">
+                      Background="Transparent"
+                      BringIntoViewOnFocusChange="False">
+            <Grid x:Name="ImageContainer">
                 <Image x:Name="MainImage"
                        Stretch="Uniform"
                        HorizontalAlignment="Center"

@@ -224,10 +224,8 @@ namespace ProView
                 UpdateIndexDisplay();
 
                 // 延迟执行自适应缩放，确保布局已更新
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-                {
-                    FitImageToView();
-                });
+                await Task.Delay(100); 
+                FitImageToView();
             }
             catch (Exception ex)
             {
@@ -246,7 +244,7 @@ namespace ProView
 
             if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) return;
 
-            // 计算缩放比例
+            // 计算需要的缩放比例（只缩小不放大）
             double scaleX = viewWidth / imageWidth;
             double scaleY = viewHeight / imageHeight;
             double scaleFactor = Math.Min(scaleX, scaleY);
@@ -257,20 +255,18 @@ namespace ProView
             // 确保缩放因子在有效范围内
             zoomFactor = Math.Max(0.1f, Math.Min(10.0f, zoomFactor));
 
-            // 设置图片容器的尺寸（让 ScrollViewer 正确计算滚动范围）
-            ImageContainer.Width = imageWidth;
-            ImageContainer.Height = imageHeight;
-
-            // 应用缩放
-            ImageScroller.ZoomToFactor(zoomFactor);
-
-            // 居中显示：计算滚动位置使图片居中
+            // 计算居中位置
             double scaledWidth = imageWidth * zoomFactor;
             double scaledHeight = imageHeight * zoomFactor;
             
-            double scrollX = Math.Max(0, (scaledWidth - viewWidth) / 2);
-            double scrollY = Math.Max(0, (scaledHeight - viewHeight) / 2);
+            double scrollX = (viewWidth - scaledWidth) / 2;
+            double scrollY = (viewHeight - scaledHeight) / 2;
 
+            // 确保滚动位置合理
+            scrollX = Math.Max(0, scrollX);
+            scrollY = Math.Max(0, scrollY);
+
+            // 应用缩放和居中位置
             ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
         }
 
@@ -356,10 +352,8 @@ namespace ProView
                 ShowInfo();
 
                 // 延迟执行自适应缩放
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-                {
-                    FitImageToView();
-                });
+                await Task.Delay(100);
+                FitImageToView();
             }
             catch (Exception ex)
             {

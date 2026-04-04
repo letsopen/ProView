@@ -14,8 +14,6 @@
       <RootProperty Name="AllowDrop" />
       <RootProperty Name="Background" />
       <RootProperty Name="Children" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
       <RootEvent Name="KeyDown" />
       <RootEvent Name="PointerWheelChanged" />
       <RootEvent Name="DragOver" />
@@ -30,6 +28,7 @@
       <RootProperty Name="MinZoomFactor" />
       <RootProperty Name="MaxZoomFactor" />
       <RootProperty Name="Background" />
+      <RootProperty Name="BringIntoViewOnFocusChange" />
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
