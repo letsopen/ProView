@@ -30,8 +30,9 @@
       </uap:VisualElements>
       <Extensions>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="image">
-            <uap:DisplayName>Image Files</uap:DisplayName>
+          <uap:FileTypeAssociation Name="image" DesiredView="default">
+            <uap:DisplayName>ProView Image</uap:DisplayName>
+            <uap:Logo>Assets\Square44x44Logo.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType ContentType="image/jpeg">.jpg</uap:FileType>
               <uap:FileType ContentType="image/jpeg">.jpeg</uap:FileType>

@@ -25,7 +25,6 @@ namespace ProView
         private ImageFileInfo _currentImage;
         private bool _isInfoVisible = false;
         private DispatcherTimer _infoTimer;
-        private bool _hasFileSystemPermission = false;
 
         // 支持的图片格式
         private static readonly string[] SupportedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp" };
@@ -55,17 +54,16 @@ namespace ProView
             {
                 // 尝试访问一个常见路径来检测权限
                 var testFolder = await StorageFolder.GetFolderFromPathAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
-                _hasFileSystemPermission = true;
+                // 权限正常，继续执行
             }
             catch (UnauthorizedAccessException)
             {
-                _hasFileSystemPermission = false;
                 await ShowPermissionDialogAsync();
             }
             catch (Exception)
             {
                 // 其他异常也认为没有权限
-                _hasFileSystemPermission = false;
+                await ShowPermissionDialogAsync();
             }
         }
 
