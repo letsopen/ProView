@@ -51,7 +51,14 @@ namespace ProView
 
         private async void OnPageLoaded(object sender, RoutedEventArgs e)
         {
-            await CheckFileSystemPermissionAsync();
+            try
+            {
+                await CheckFileSystemPermissionAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"权限检查失败: {ex.Message}");
+            }
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
         }
 
@@ -61,34 +68,40 @@ namespace ProView
             {
                 // 尝试访问一个常见路径来检测权限
                 var testFolder = await StorageFolder.GetFolderFromPathAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
-                // 权限正常，继续执行
             }
             catch (UnauthorizedAccessException)
             {
                 await ShowPermissionDialogAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // 其他异常也认为没有权限
-                await ShowPermissionDialogAsync();
+                System.Diagnostics.Debug.WriteLine($"权限检查异常: {ex.Message}");
+                // 其他异常不弹窗，静默处理
             }
         }
 
         private async Task ShowPermissionDialogAsync()
         {
-            var dialog = new ContentDialog
+            try
             {
-                Title = "需要文件系统权限",
-                Content = "ProView 需要文件系统访问权限才能浏览图片。\n\n请点击\"打开设置\"，在隐私设置中开启\"文件系统\"权限。",
-                PrimaryButtonText = "打开设置",
-                CloseButtonText = "稍后再说"
-            };
+                var dialog = new ContentDialog
+                {
+                    Title = "需要文件系统权限",
+                    Content = "ProView 需要文件系统访问权限才能浏览图片。\n\n请点击\"打开设置\"，在隐私设置中开启\"文件系统\"权限，然后重新打开应用。",
+                    PrimaryButtonText = "打开设置",
+                    CloseButtonText = "稍后再说"
+                };
 
-            var result = await dialog.ShowAsync();
-            
-            if (result == ContentDialogResult.Primary)
+                var result = await dialog.ShowAsync();
+                
+                if (result == ContentDialogResult.Primary)
+                {
+                    await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
+                }
+            }
+            catch (Exception ex)
             {
-                await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
+                System.Diagnostics.Debug.WriteLine($"显示权限对话框失败: {ex.Message}");
             }
         }
 
