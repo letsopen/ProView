@@ -26,7 +26,9 @@
                       MaxZoomFactor="10.0"
                       Background="Transparent"
                       BringIntoViewOnFocusChange="False">
-            <Grid x:ConnectionId='7' x:Name="ImageContainer">
+            <!-- 图片容器，设置固定尺寸以配合 ScrollViewer -->
+            <Grid x:ConnectionId='7' x:Name="ImageContainer"
+                  Background="Transparent">
                 <Image x:ConnectionId='8' x:Name="MainImage"
                        Stretch="Uniform"
                        HorizontalAlignment="Center"
