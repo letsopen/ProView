@@ -8,6 +8,80 @@
       Background="Black"
       Loaded="OnPageLoaded">
 
+    <Page.Resources>
+        <!-- 幻灯片移入左侧动画 -->
+        <Storyboard x:Name="SlideInLeftStoryboard">
+            <DoubleAnimation Storyboard.TargetName="SecondImage"
+                           Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
+                           From="-600"
+                           To="0"
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="SecondImage"
+                           Storyboard.TargetProperty="Opacity"
+                           From="0"
+                           To="1"
+                           Duration="0:0:0.2"/>
+        </Storyboard>
+
+        <!-- 幻灯片移入右侧动画 -->
+        <Storyboard x:Name="SlideInRightStoryboard">
+            <DoubleAnimation Storyboard.TargetName="SecondImage"
+                           Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
+                           From="600"
+                           To="0"
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="SecondImage"
+                           Storyboard.TargetProperty="Opacity"
+                           From="0"
+                           To="1"
+                           Duration="0:0:0.2"/>
+        </Storyboard>
+
+        <!-- 幻灯片移出左侧动画 -->
+        <Storyboard x:Name="SlideOutLeftStoryboard">
+            <DoubleAnimation Storyboard.TargetName="MainImage"
+                           Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
+                           From="0"
+                           To="-600"
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="MainImage"
+                           Storyboard.TargetProperty="Opacity"
+                           From="1"
+                           To="0"
+                           Duration="0:0:0.2"/>
+        </Storyboard>
+
+        <!-- 幻灯片移出右侧动画 -->
+        <Storyboard x:Name="SlideOutRightStoryboard">
+            <DoubleAnimation Storyboard.TargetName="MainImage"
+                           Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
+                           From="0"
+                           To="600"
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="MainImage"
+                           Storyboard.TargetProperty="Opacity"
+                           From="1"
+                           To="0"
+                           Duration="0:0:0.2"/>
+        </Storyboard>
+    </Page.Resources>
+
     <Grid x:Name="RootGrid"
           KeyDown="OnKeyDown"
           PointerWheelChanged="OnPointerWheelChanged"
@@ -26,13 +100,28 @@
                       MaxZoomFactor="10.0"
                       Background="Transparent"
                       BringIntoViewOnFocusChange="False">
-            <!-- 图片容器，设置固定尺寸以配合 ScrollViewer -->
+            <!-- 双图片容器用于幻灯片切换 -->
             <Grid x:Name="ImageContainer"
                   Background="Transparent">
                 <Image x:Name="MainImage"
                        Stretch="Uniform"
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"
+                       RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <CompositeTransform/>
+                    </Image.RenderTransform>
+                </Image>
+                <Image x:Name="SecondImage"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Opacity="0"
+                       RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <CompositeTransform/>
+                    </Image.RenderTransform>
+                </Image>
             </Grid>
         </ScrollViewer>
 
