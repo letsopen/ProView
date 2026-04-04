@@ -1,0 +1,30 @@
+# Build
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.pfx
+AppPackages/
+BundleArtifacts/
+
+# Visual Studio
+.vs/
+*.VC.db
+*.VC.VC.opendb
+
+# Universal / generated
+*.generated.cs
+project.lock.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
