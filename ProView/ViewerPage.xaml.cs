@@ -246,23 +246,30 @@ namespace ProView
 
             if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) return;
 
-            // 计算缩放比例，使长边刚好贴合可视区域边缘
+            // 计算缩放比例
             double scaleX = viewWidth / imageWidth;
             double scaleY = viewHeight / imageHeight;
-            float zoomFactor = (float)Math.Min(scaleX, scaleY);
+            double scaleFactor = Math.Min(scaleX, scaleY);
+
+            // 只缩小不放大：如果图片比可视区域小，保持原始大小
+            float zoomFactor = (scaleFactor < 1.0) ? (float)scaleFactor : 1.0f;
 
             // 确保缩放因子在有效范围内
             zoomFactor = Math.Max(0.1f, Math.Min(10.0f, zoomFactor));
 
+            // 设置图片容器的尺寸（让 ScrollViewer 正确计算滚动范围）
+            ImageContainer.Width = imageWidth;
+            ImageContainer.Height = imageHeight;
+
             // 应用缩放
             ImageScroller.ZoomToFactor(zoomFactor);
 
-            // 居中显示 - 滚动到中心位置
-            double scrollX = (imageWidth * zoomFactor - viewWidth) / 2;
-            double scrollY = (imageHeight * zoomFactor - viewHeight) / 2;
+            // 居中显示：计算滚动位置使图片居中
+            double scaledWidth = imageWidth * zoomFactor;
+            double scaledHeight = imageHeight * zoomFactor;
             
-            if (scrollX < 0) scrollX = 0;
-            if (scrollY < 0) scrollY = 0;
+            double scrollX = Math.Max(0, (scaledWidth - viewWidth) / 2);
+            double scrollY = Math.Max(0, (scaledHeight - viewHeight) / 2);
 
             ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
         }

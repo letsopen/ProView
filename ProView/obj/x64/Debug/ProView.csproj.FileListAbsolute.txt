@@ -10,6 +10,7 @@ C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\Core\ProView.exe
 C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\ProView.build.appxrecipe
 C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\System.Runtime.dll
 C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\Microsoft.UI.Xaml.Markup.winmd
+C:\Users\Administrator\AIProjects\ProView\ProView\obj\x64\Debug\ProView.csproj.AssemblyReference.cache
 C:\Users\Administrator\AIProjects\ProView\ProView\obj\x64\Debug\App.g.i.cs
 C:\Users\Administrator\AIProjects\ProView\ProView\obj\x64\Debug\App.g.cs
 C:\Users\Administrator\AIProjects\ProView\ProView\obj\x64\Debug\ViewerPage.g.i.cs

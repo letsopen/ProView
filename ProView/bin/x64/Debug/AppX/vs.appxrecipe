@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-04-04T06:36:48.388</Modified>
+      <Modified>2026-04-04T06:53:41.052</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\ProView.exe">
       <PackagePath>entrypoint\ProView.exe</PackagePath>
-      <Modified>2026-04-04T06:36:47.524</Modified>
+      <Modified>2026-04-04T06:53:39.565</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\.nuget\packages\runtime.win10-x64.microsoft.netcore.universalwindowsplatform\6.2.14\runtimes\win10-x64\lib\uap10.0.15138\System.Runtime.dll">
       <PackagePath>System.Runtime.dll</PackagePath>
@@ -86,15 +86,15 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\ProView.xr.xml">
       <PackagePath>ProView.xr.xml</PackagePath>
-      <Modified>2026-04-04T06:36:47.405</Modified>
+      <Modified>2026-04-04T06:53:39.431</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2026-04-04T06:36:47.410</Modified>
+      <Modified>2026-04-04T06:53:39.449</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\ViewerPage.xbf">
       <PackagePath>ViewerPage.xbf</PackagePath>
-      <Modified>2026-04-04T06:36:47.411</Modified>
+      <Modified>2026-04-04T06:53:39.450</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -102,11 +102,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-04-04T06:36:47.848</Modified>
+      <Modified>2026-04-04T06:53:40.139</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Administrator\AIProjects\ProView\ProView\bin\x64\Debug\Core\ProView.exe">
       <PackagePath>ProView.exe</PackagePath>
-      <Modified>2026-04-04T06:36:48.384</Modified>
+      <Modified>2026-04-04T06:53:41.041</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

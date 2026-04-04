@@ -25,10 +25,14 @@
                       MinZoomFactor="0.1"
                       MaxZoomFactor="10.0"
                       Background="Transparent">
-            <Image x:ConnectionId='7' x:Name="MainImage"
-                   Stretch="Uniform"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+            <Grid x:ConnectionId='7' x:Name="ImageContainer"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <Image x:ConnectionId='8' x:Name="MainImage"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </Grid>
         </ScrollViewer>
 
         <!-- 极简信息提示 (文件名) -->
