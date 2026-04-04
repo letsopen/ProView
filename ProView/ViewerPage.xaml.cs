@@ -83,6 +83,11 @@ namespace ProView
             };
         }
 
+        private async void OnOpenPromptTapped(object sender, TappedRoutedEventArgs e)
+        {
+            await OpenFilePicker();
+        }
+
         private void OnDragOver(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy;
@@ -210,9 +215,6 @@ namespace ProView
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
 
-                // 重置缩放
-                ImageScroller.ZoomToFactor(1.0f);
-
                 // 更新 UI
                 OpenPrompt.Visibility = Visibility.Collapsed;
                 ShowInfo();
@@ -220,11 +222,49 @@ namespace ProView
                 // 更新索引显示
                 _currentIndex = _imageFiles.IndexOf(file);
                 UpdateIndexDisplay();
+
+                // 延迟执行自适应缩放，确保布局已更新
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+                {
+                    FitImageToView();
+                });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
             }
+        }
+
+        private void FitImageToView()
+        {
+            if (_currentImage == null) return;
+
+            double imageWidth = _currentImage.ImageWidth;
+            double imageHeight = _currentImage.ImageHeight;
+            double viewWidth = ImageScroller.ActualWidth;
+            double viewHeight = ImageScroller.ActualHeight;
+
+            if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) return;
+
+            // 计算缩放比例，使长边刚好贴合可视区域边缘
+            double scaleX = viewWidth / imageWidth;
+            double scaleY = viewHeight / imageHeight;
+            float zoomFactor = (float)Math.Min(scaleX, scaleY);
+
+            // 确保缩放因子在有效范围内
+            zoomFactor = Math.Max(0.1f, Math.Min(10.0f, zoomFactor));
+
+            // 应用缩放
+            ImageScroller.ZoomToFactor(zoomFactor);
+
+            // 居中显示 - 滚动到中心位置
+            double scrollX = (imageWidth * zoomFactor - viewWidth) / 2;
+            double scrollY = (imageHeight * zoomFactor - viewHeight) / 2;
+            
+            if (scrollX < 0) scrollX = 0;
+            if (scrollY < 0) scrollY = 0;
+
+            ImageScroller.ChangeView(scrollX, scrollY, zoomFactor);
         }
 
         private async Task LoadSiblingImagesAsync(StorageFile file)
@@ -305,11 +345,14 @@ namespace ProView
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
 
-                // 重置缩放
-                ImageScroller.ZoomToFactor(1.0f);
-
                 UpdateIndexDisplay();
                 ShowInfo();
+
+                // 延迟执行自适应缩放
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+                {
+                    FitImageToView();
+                });
             }
             catch (Exception ex)
             {

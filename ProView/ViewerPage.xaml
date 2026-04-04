@@ -55,7 +55,9 @@
         <StackPanel x:Name="OpenPrompt"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Spacing="16">
+                    Spacing="16"
+                    Tapped="OnOpenPromptTapped"
+                    IsTapEnabled="True">
             <FontIcon Glyph="&#xEB9F;" 
                       FontSize="64" 
                       Foreground="#40FFFFFF"/>
