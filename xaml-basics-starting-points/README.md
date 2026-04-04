@@ -1,6 +1,6 @@
 # XAML basics - tutorial sample code
 
-This folder contains simplified versions of the complete PhotoLab sample which serve as starting points for a series of XAML basics tutorials. 
+This folder contains simplified versions of the complete ProView sample which serve as starting points for a series of XAML basics tutorials. 
 This simplification makes the code easier to browse around in as you go through each tutorial.
 
 > **Note:** The tutorials do not proceed sequentially to build up to the complete sample, so be sure to start each tutorial by opening the correct starting point project. 

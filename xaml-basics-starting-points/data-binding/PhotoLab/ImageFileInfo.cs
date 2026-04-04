@@ -31,7 +31,7 @@ using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace PhotoLab
+namespace ProView
 {
     public class ImageFileInfo : INotifyPropertyChanged
     {

@@ -39,7 +39,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-namespace PhotoLab
+namespace ProView
 {
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {

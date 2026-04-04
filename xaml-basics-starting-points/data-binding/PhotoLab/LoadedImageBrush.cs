@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.Storage.Streams;
 
-namespace PhotoLab
+namespace ProView
 {
     class LoadedImageBrush : XamlCompositionBrushBase
     {

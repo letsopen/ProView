@@ -13,14 +13,14 @@ statusNotificationTargets:
   category: ControlsLayoutAndText FilesFoldersAndLibraries
 -->
 
-# PhotoLab sample
+# ProView sample
 
 A mini-app for viewing and editing image files, demonstrating XAML layout, data binding, and UI customization features for Universal Windows Platform (UWP) apps.
 
 > Note - This sample is targeted and tested for Windows 10, version 2004 (10.0; Build 19041), and Visual Studio 2019. If you prefer, you can use project properties to retarget the project(s) to Windows 10, version 1903 (10.0; Build 18362).
 
-![PhotoLab sample showing the image collection page](Screenshots/PhotoLab-collection-page.png)
-![PhotoLab sample showing the image editing page](Screenshots/PhotoLab-editing-page.png)
+![ProView sample showing the image collection page](Screenshots/ProView-collection-page.png)
+![ProView sample showing the image editing page](Screenshots/ProView-editing-page.png)
 
 This repo includes the complete sample pictured above, plus separate versions that serve as starting points for a series of
 [XAML basics tutorials](xaml-basics-starting-points).
@@ -31,7 +31,7 @@ Also, be sure to check out the complete sample to see additional features such a
 
 ## Features
 
-PhotoLab demonstrates:
+ProView demonstrates:
 
 * XAML layout ranging from basics to adaptive and tailored layouts.
 * XAML data binding including the [{x:Bind} markup extension](https://docs.microsoft.com/windows/uwp/xaml-platform/x-bind-markup-extension).
@@ -45,10 +45,10 @@ PhotoLab demonstrates:
 If you're just interested in code snippets for certain areas and don't want to browse or run the full sample, 
 check out the following files for examples of some highlighted features:
 
-* Layout: see [MainPage.xaml](PhotoLab/MainPage.xaml#25) and [DetailPage.xaml](PhotoLab/DetailPage.xaml#25).
-* Data binding with x:Bind: see [ImageGridView_DefaultItemTemplate](PhotoLab/MainPage.xaml#72) in [MainPage.xaml](PhotoLab/MainPage.xaml#25)
-* Styling and customization: see [FancySliderControlTemplate](PhotoLab/DetailPage.xaml#61) in [DetailPage.xaml](PhotoLabl/DetailPage.xaml#25). 
-* Image effects: see code starting with [InitializeEffects](PhotoLab/DetailPage.xaml.cs#185) in [DetailPage.xaml.cs](PhotoLab/DetailPage.xaml.cs#25).
+* Layout: see [MainPage.xaml](ProView/MainPage.xaml#25) and [DetailPage.xaml](ProView/DetailPage.xaml#25).
+* Data binding with x:Bind: see [ImageGridView_DefaultItemTemplate](ProView/MainPage.xaml#72) in [MainPage.xaml](ProView/MainPage.xaml#25)
+* Styling and customization: see [FancySliderControlTemplate](ProView/DetailPage.xaml#61) in [DetailPage.xaml](PhotoLabl/DetailPage.xaml#25). 
+* Image effects: see code starting with [InitializeEffects](ProView/DetailPage.xaml.cs#185) in [DetailPage.xaml.cs](ProView/DetailPage.xaml.cs#25).
 
 ## Related documentation and samples
 
@@ -78,7 +78,7 @@ the [Windows Insider Program](https://insider.windows.com).
 
 ## Running the sample
 
-The default project is PhotoLab and you can Start Debugging (F5) or Start Without Debugging (Ctrl+F5) to try it out. 
+The default project is ProView and you can Start Debugging (F5) or Start Without Debugging (Ctrl+F5) to try it out. 
 The app will run in the emulator or on physical devices. 
 
 > **Note:** The platform target currently defaults to ARM, so be sure to change that to x64 or x86 if you want to test on a non-ARM device. 

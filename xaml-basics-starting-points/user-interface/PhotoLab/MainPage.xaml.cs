@@ -33,7 +33,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace PhotoLab
+namespace ProView
 {
     public sealed partial class MainPage : Page
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{95D9D016-79D5-451B-856E-C1F20FDAE91F}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PhotoLab</RootNamespace>
-    <AssemblyName>PhotoLab</AssemblyName>
+    <RootNamespace>ProView</RootNamespace>
+    <AssemblyName>ProView</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
