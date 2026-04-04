@@ -91,11 +91,18 @@ namespace ProView
             // 完全拦截滚轮事件用于缩放
             e.Handled = true;
             
-            // 获取滚轮方向
-            var delta = e.GetCurrentPoint(ImageScroller).Properties.MouseWheelDelta;
+            // 获取鼠标在 ScrollViewer 视口中的位置
+            var pointerPoint = e.GetCurrentPoint(ImageScroller);
+            double mouseX = pointerPoint.Position.X;
+            double mouseY = pointerPoint.Position.Y;
             
-            // 获取当前缩放因子
+            // 获取滚轮方向
+            var delta = pointerPoint.Properties.MouseWheelDelta;
+            
+            // 获取当前缩放因子和滚动偏移
             float currentZoom = ImageScroller.ZoomFactor;
+            double currentOffsetX = ImageScroller.HorizontalOffset;
+            double currentOffsetY = ImageScroller.VerticalOffset;
             
             // 计算新的缩放因子（每次滚动调整10%）
             float zoomDelta = delta > 0 ? 0.1f : -0.1f;
@@ -104,8 +111,17 @@ namespace ProView
             // 限制在有效范围内
             newZoom = Math.Max(0.1f, Math.Min(10.0f, newZoom));
             
-            // 应用缩放（禁用动画）
-            ImageScroller.ChangeView(null, null, newZoom, true);
+            // 计算鼠标在图片上的位置（相对于图片左上角，以像素为单位）
+            // 滚动偏移 + 鼠标位置 = 缩放后图片上的位置，再除以缩放因子得到原始图片坐标
+            double imageX = (currentOffsetX + mouseX) / currentZoom;
+            double imageY = (currentOffsetY + mouseY) / currentZoom;
+            
+            // 计算新的滚动偏移，使鼠标位置指向相同的图片像素
+            double newOffsetX = imageX * newZoom - mouseX;
+            double newOffsetY = imageY * newZoom - mouseY;
+            
+            // 应用缩放和滚动位置（禁用动画）
+            ImageScroller.ChangeView(newOffsetX, newOffsetY, newZoom, true);
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
