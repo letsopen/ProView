@@ -14,7 +14,6 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ProView
@@ -209,21 +208,12 @@ namespace ProView
                 // 加载同级目录图片列表
                 await LoadSiblingImagesAsync(file);
 
-                // 加载当前图片（首次加载直接显示在 MainImage）
+                // 加载当前图片
                 _currentImage = new ImageFileInfo(file);
                 await _currentImage.InitializeAsync();
 
                 var bitmap = await _currentImage.GetImageSourceAsync();
                 MainImage.Source = bitmap;
-                SecondImage.Source = null;
-                SecondImage.Opacity = 0;
-
-                // 重置变换
-                var mainTransform = MainImage.RenderTransform as CompositeTransform;
-                if (mainTransform != null)
-                {
-                    mainTransform.TranslateX = 0;
-                }
                 MainImage.Opacity = 1;
 
                 // 设置容器尺寸为图片原始尺寸
@@ -338,7 +328,7 @@ namespace ProView
                 _currentIndex = _imageFiles.Count - 1; // 循环到末尾
             }
 
-            await SlideToImageAsync(_currentIndex, "right");
+            await LoadImageAt(_currentIndex);
         }
 
         private async Task NavigateNext()
@@ -351,71 +341,45 @@ namespace ProView
                 _currentIndex = 0; // 循环到开头
             }
 
-            await SlideToImageAsync(_currentIndex, "left");
+            await LoadImageAt(_currentIndex);
         }
 
-        private async Task SlideToImageAsync(int index, string direction)
+        private async Task LoadImageAt(int index)
         {
             if (index < 0 || index >= _imageFiles.Count) return;
 
             var file = _imageFiles[index];
+            
+            // 先黑屏，隐藏当前图片
+            MainImage.Opacity = 0;
+            
             try
             {
-                // 加载新图片到 SecondImage
-                var newImage = new ImageFileInfo(file);
-                await newImage.InitializeAsync();
+                // 加载新图片
+                _currentImage = new ImageFileInfo(file);
+                await _currentImage.InitializeAsync();
 
-                var bitmap = await newImage.GetImageSourceAsync();
-                SecondImage.Source = bitmap;
-
-                // 播放切换动画
-                if (direction == "left")
-                {
-                    // 下一张：当前向左移出，新图从右侧移入
-                    SlideOutLeftStoryboard.Begin();
-                    SlideInRightStoryboard.Begin();
-                }
-                else
-                {
-                    // 上一张：当前向右移出，新图从左侧移入
-                    SlideOutRightStoryboard.Begin();
-                    SlideInLeftStoryboard.Begin();
-                }
-
-                // 等待动画完成
-                await Task.Delay(300);
-
-                // 动画完成后，交换图片引用
-                _currentImage = newImage;
-                MainImage.Source = SecondImage.Source;
-                SecondImage.Source = null;
-                SecondImage.Opacity = 0;
-
-                // 重置变换
-                var mainTransform = MainImage.RenderTransform as CompositeTransform;
-                var secondTransform = SecondImage.RenderTransform as CompositeTransform;
-                if (mainTransform != null)
-                {
-                    mainTransform.TranslateX = 0;
-                }
-                if (secondTransform != null)
-                {
-                    secondTransform.TranslateX = 0;
-                }
+                var bitmap = await _currentImage.GetImageSourceAsync();
+                MainImage.Source = bitmap;
 
                 // 设置容器尺寸
                 ImageContainer.Width = _currentImage.ImageWidth;
                 ImageContainer.Height = _currentImage.ImageHeight;
 
+                // 后台应用缩放和居中
+                FitImageToView();
+
                 UpdateIndexDisplay();
                 ShowInfo();
 
-                // 应用缩放和居中（无动画，直接应用）
-                FitImageToView();
+                // 显示图片
+                MainImage.Opacity = 1;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"切换图片失败: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"加载图片失败: {ex.Message}");
+                // 出错也要恢复显示
+                MainImage.Opacity = 1;
             }
         }
 
