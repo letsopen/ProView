@@ -1,14 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.37027.11
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProView", "PhotoLab\ProView.csproj", "{95D9D016-79D5-451B-856E-C1F20FDAE91F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLab", "PhotoLab\PhotoLab.csproj", "{95D9D016-79D5-451B-856E-C1F20FDAE91F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C7CFA4A-5FEC-4548-8409-99987E643834}"
 	ProjectSection(SolutionItems) = preProject
-		CONTRIBUTING.md = CONTRIBUTING.md
-		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -45,6 +43,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7E899C27-F364-4E06-9DF5-7ECF7EE3BCE6}
+		SolutionGuid = {FBA74BCC-647D-4A90-9513-3B7750ECFB17}
 	EndGlobalSection
 EndGlobal
