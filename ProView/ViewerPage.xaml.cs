@@ -358,6 +358,18 @@ namespace ProView
             return SupportedExtensions.Contains(ext);
         }
 
+        private int FindImageIndex(StorageFile file)
+        {
+            for (int i = 0; i < _imageFiles.Count; i++)
+            {
+                if (string.Equals(_imageFiles[i].Path, file.Path, StringComparison.OrdinalIgnoreCase))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         private async Task LoadImageAsync(StorageFile file)
         {
             try
@@ -375,7 +387,7 @@ namespace ProView
                 OpenPrompt.Visibility = Visibility.Collapsed;
                 ShowInfo();
 
-                _currentIndex = _imageFiles.IndexOf(file);
+                _currentIndex = FindImageIndex(file);
                 UpdateIndexDisplay();
 
                 FitImageToView();
@@ -430,7 +442,7 @@ namespace ProView
                             _imageFiles.Add(f);
                         }
                     }
-                    _currentIndex = _imageFiles.IndexOf(file);
+                    _currentIndex = FindImageIndex(file);
                 }
             }
             catch (Exception ex)
