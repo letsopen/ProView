@@ -8,4 +8,15 @@
     <DeviceId>30f105c9-681e-420b-a277-7c086ead8a4e</DeviceId>
     <UseEmulator>true</UseEmulator>
   </PropertyGroup>
+  <PropertyGroup>
+    <Source>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</Source>
+    <SmallTileSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</SmallTileSource>
+    <MediumTileSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</MediumTileSource>
+    <WideTileSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</WideTileSource>
+    <LargeTileSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</LargeTileSource>
+    <AppIconSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</AppIconSource>
+    <SplashScreenSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</SplashScreenSource>
+    <BadgeLogoSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</BadgeLogoSource>
+    <PackageLogoSource>C:\Users\Administrator\Downloads\Gemini_Generated_Image_p7cqfhp7cqfhp7cq%282%29-no-bg.png</PackageLogoSource>
+  </PropertyGroup>
 </Project>
