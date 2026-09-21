@@ -114,3 +114,62 @@ Desktop.ini
 
 # macOS
 .DS_Store
+
+# AI coding agents / assistants
+.codeartsdoer/
+.qwen/
+.copilot/
+.cursor/
+.windsurf/
+.codeium/
+.trae/
+.trae-aide/
+.gemini/
+.claude/
+.codex/
+.continue/
+.cline/
+.roo/
+.augment/
+.comate/
+.lingma/
+.marscode/
+.codebuddy/
+.tabnine/
+.tabby/
+.qoder/
+.aider*
+.workbuddy*
+.traework*
+.qoderwork*
+.qwenwork*
+
+# IDEs / editors
+.vscode/
+.idea/
+.fleet/
+.zed/
+.vscode-test/
+
+# AI Agents / 跨界办公与研发协作工具 (国内外版)
+
+# WorkBuddy (CodeBuddy)
+.workbuddy/
+.workbuddy-ai/
+
+# Qoder (Tencent)
+.qoderwork/
+.qoderignore
+
+# Trae Work (ByteDance)
+.traework/
+
+# Qwen Work / Aliyun
+.qwenwork/
+
+# Huawei CodeArts (Workspace & Cloud)
+.codearts/
+.codeartsspace/
+
+# Microsoft Codespaces
+.codespaces/
